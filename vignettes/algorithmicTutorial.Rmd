@@ -1,0 +1,59 @@
+---
+title: "Tutorial of algorithmic Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+This vignette is an introduction to the three functions included within the algorithmic package: storersA, storersD, and biasedcoin. 
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(algorithmic)
+```
+
+# storersA
+This function simulates Storer's 3+3 design, a very simple, algorithmic dose-finding trial design. Groups of 3 patients are treated at one time. If no dose-limiting toxicities (DLTs) are observed in a group of 3, then the next group of 3 is given the next highest dose. If exactly one DLT is observed, 3 additional patients are treated on the same dose. If no DLTs occur in this additional group of 3, the next 3 are given the next highest dose. If 1 or more DLTs occurs in this group of 3, the trial stops and the MTD is determined to be the previous dose. If more than two DLTs are observed in the first group of 3 patients treated on a dose, the trial stops and the MTD is determined to be the previous dose. This design is well-liked by clinicians and investigators for its simplicity. 
+
+```{r}
+storersA(true_probs = c(0.10, 0.15, 0.20, 0.25, 0.30), nsim = 2000, seed = 10071998)
+```
+
+## Comparing storersA to ssimp3p
+```{r, echo = TRUE}
+UBCRM::ssim3p3(truerate = c(0.10, 0.15, 0.20, 0.25, 0.30), n = 2000, r = 4, seed = 10071998)$data[,5]
+```
+
+The results of storersA and ssimp3p are identical. 
+
+## Comparing efficiency of storersA function to ssim3p3 function
+```{r, echo = TRUE}
+system.time(storersA(true_probs = c(0.10, 0.15, 0.20, 0.25, 0.30), nsim = 2000, seed = 10071998))
+system.time(UBCRM::ssim3p3(truerate = c(0.10, 0.15, 0.20, 0.25, 0.30), n = 2000, r = 4, seed = 10071998))
+```
+The storersA function is faster than the ssimp3p function within the UBCRM package. 
+
+# storersD
+This function simulates Storer's D 3+3 design, a design very similar to Storer's A design. However, this design allows for de-escalation of dose levels after toxicities are observed. Escalation occurs if no toxicity is seen and de-escalation occurs if more than one toxicity is seen. 
+
+```{r, echo = TRUE}
+storersD(true_probs = c(0.10, 0.15, 0.20, 0.25, 0.30), npat = 30, nsim = 2000, seed = 10071998)
+```
+To my knowledge, there are not currently any functions in R that simulate storer's D designs. 
+
+# biasedcoin
+This function simulates a biased coin design, a dose-finding trial design in which one patient is treated at a time. If a DLT is observed, the next patient is enrolled on the next lowest dose. If no DLT is observed, a biased coin is flipped to determine whether the next patient is enrolled on the next highest dose or the same dose. 
+
+```{r, echo = TRUE}
+biasedcoin(true_probs = c(0.10, 0.15, 0.20, 0.25, 0.30), start = 1, q_esc = 0.60, npat = 30, nsim = 2000, seed = 10071998)
+```
+
+To my knowledge, there are not currently any functions in R that simulate phase I biased coin designs. 
+

@@ -1,0 +1,18 @@
+Package: algorithmic
+Type: Package
+Title: Functions to Simulate Phase I Algorithmic Up Down Clinical Trial Designs
+Version: 0.1.0
+Author: Jenna Bedrava
+Maintainer: Jenna Bedrava <bedrava@umich.edu>
+Description: Three algorithmic up down designs are implemented within this package: Storer's 3 + 3 design, Storer's D 3 + 3 design, and the biased coin design. The goal of phase I trials is to identify the Maxiumum Tolerated Dose (MTD) while minimizing the number of observed toxicities in patients. Simulations of these trial designs are useful for estimating the operating characteristics of different algorithmic designs. 
+License: GPL-2
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
+Suggests: 
+    knitr,
+    rmarkdown,
+    UBCRM
+VignetteBuilder: knitr
+Imports: 
+        stats (>= 3.6.0)
